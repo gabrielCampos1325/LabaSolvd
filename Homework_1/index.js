@@ -14,7 +14,7 @@ String.prototype.plus = function (str) {
         result = sum % 10 + result;
     }
 
-    return carryFlag ? (1 + result) : result;;
+    return carryFlag ? (1 + result) : result;
 };
 
 let num1 = "9";
@@ -89,5 +89,40 @@ console.log("Divide: " + num3.divide(num4));
 
 
 String.prototype.multiply = function (str) {
-    
+    let multiplicand = this;
+    let multiplier = str;
+    let aux = "";
+    let result = "0";
+    let current;
+    let carry;
+
+    for (let i = 1; i <= multiplier.length; i++) {
+        carry = 0;
+        for (let j = 1; j <= multiplicand.length; j++) {
+            current = parseInt(multiplicand[multiplicand.length - j]) *
+                      parseInt(multiplier[multiplier.length - i]) + 
+                      carry; 
+            carry = current > 9 ? Math.floor(current / 10) : 0;
+            aux = current % 10 + aux;       
+        }
+
+        aux = carry > 0 ? carry + aux : aux;
+
+        result = result.plus(aux);        
+        
+        aux = "";
+        for (let k = 0; k < i; k++) {
+            aux = aux + 0;
+        }        
+    }
+
+    return result;
 }
+
+num1 = "999";
+num2 = "99";
+num3 = "8";
+num4 = "25";
+
+console.log("Multiply: " + num1.multiply(num2));
+console.log("Multiply: " + num3.multiply(num4));
