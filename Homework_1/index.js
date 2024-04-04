@@ -28,7 +28,7 @@ console.log("Plus: " + num3.plus(num2));
 
 String.prototype.minus = function (str) {
     if (parseInt(str) > parseInt(this)) {
-        return "The second parameter needs to be smaller than the first parameter";
+        throw new Error("The second parameter needs to be smaller than the first parameter");
     }
 
     let n = (this.length >= str.length) ? this.length : str.length;
@@ -46,54 +46,59 @@ String.prototype.minus = function (str) {
         result = (borrowFlag ? (10 + sub) : sub) + result; //I concatenate the partial result to the final result
     }
 
-    return parseInt(result).toString(); //I elimitate the leading zeros
+    return result.replace(/^0+/, ""); //I elimitate the leading zeros
 };
 
 num1 = "1000";
 num2 = "457";
-num3 = "397";
-num4 = "99";
+num3 = "4444444444444444444444444444444440";
+num4 = "2";
 
 console.log("Minus: " + num1.minus(num2));
 console.log("Minus: " + num3.minus(num4));
 
 
 String.prototype.divide = function (str) {
-    let dividend = this; 
-    let divisor = str;
-    let quotient = "";
-    let i;
-    let j = 0;
-    let aux;
-    let found;
-
-    while (parseInt(dividend) > parseInt(divisor)) { //I loop until the rest is smaller than the divisor
-        i = 0;
-        aux = "";
-        found = false;
-        while (!found) { //I find the first greater number than the divisor
-            if (parseInt(aux + dividend[i]) >= parseInt(divisor)) {                
-                found = true;
-            }
-            aux+= dividend[i];            
-            i++;
-        }
-        quotient += Math.floor(aux / divisor);
-        dividend = parseInt(aux) - (parseInt(quotient[j]) * parseInt(divisor)) + dividend.slice(i);
-        j++;
+    if (parseInt (str) == "0") {
+        throw new Error("The second parameter can not be a zero");
     }
 
+    let dividend = this;
+    let divisor = str;
+    let quotient = "";
+    let i = 0;
+    let aux = "";    
+    while (dividend !== "") {
+        i = 0;
+        aux = aux === "" ? dividend[i] : aux;
+        while (dividend[i+1] != undefined && parseInt(aux) <= parseInt(divisor)) {    
+            i++;                                        
+            aux += dividend[i];                
+        }
+        quotient += Math.floor(parseInt(aux) / parseInt(divisor));
+        aux = parseInt(aux) % parseInt(divisor);
+        if (dividend[i+1] !== "") {
+            aux+= dividend[i+1];
+            i++;
+        }
+        while (dividend[i+1] != undefined && parseInt(aux) < parseInt(divisor)) { //If the current dividend is lower than the divisor I add a zero to the quotient
+            quotient += 0;
+            if (dividend[i+1] !== "") {
+                aux+= dividend[i+1];
+                i++;
+            } 
+        }         
+        dividend = dividend.slice(i);    
+    }
     return quotient;
-};
+}
 
-num1 = "201";
-num2 = "9";
-num3 = "869";
-num4 = "9";
-
+num1 = "8702";
+num2 = "8";
+num3 = "1000000000000000000000";
+num4 = "123";
 console.log("Divide: " + num1.divide(num2));
 console.log("Divide: " + num3.divide(num4));
-
 
 String.prototype.multiply = function (str) {
     let multiplicand = this;
@@ -124,7 +129,7 @@ String.prototype.multiply = function (str) {
     }
 
     return result;
-}
+};
 
 num1 = "999";
 num2 = "99";
