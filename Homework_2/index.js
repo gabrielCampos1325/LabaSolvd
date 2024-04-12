@@ -84,3 +84,85 @@ console.log(convertToNumber(false));
 console.log(convertToNumber(42));
 console.log(convertToNumber(42n)); */
 
+
+function coerceToType(value, type) {
+    let answer;
+    switch(type) {
+        case "null" :
+            answer = null;
+            break;
+        case "undefined" :
+            answer = undefined;
+            break;
+        case "boolean" :
+            try {
+                answer = Boolean(value);
+            } catch(e) {
+                throw new Error("The argument can not be converted to Boolean type")
+            }
+            break;
+        case "number" :
+            answer = convertToNumber(value);
+            break;
+        case "bigint" :
+            try {
+                answer = BigInt(value);
+            } catch(e) {
+                throw new Error("The argument can not be converted to BigInt type")
+            } 
+            break;
+        case "string" :
+            answer = stringifyValue(value);   
+            break;    
+        case "object":
+            answer = Object(value);
+            break;
+        default:
+            throw new Error("Unsupported type: " + type);
+    }
+    return answer;
+}
+
+/* console.log(coerceToType(undefined, "number"));
+console.log(coerceToType(null, "string")); 
+console.log(coerceToType("true", "boolean"));
+console.log(coerceToType("1.4557", "number")); 
+console.log(coerceToType("9007199254740993", "bigint")); 
+console.log(coerceToType(1164, "string"));  */
+
+
+//This function convert a boolean input to YES or NO
+function convertToYesOrNo(value) {
+    return value ? "YES" : "NO";
+}
+
+/* console.log(convertToYesOrNo(true));
+console.log(convertToYesOrNo(false)); */
+
+
+//This function converts RGB color to hexadecimal
+function convertToHexadecimal(r, g, b) {
+    let answer = "#";
+    let arr = [];
+    let actual;
+    arr.push(r);
+    arr.push(g);
+    arr.push(b);
+    arr.forEach(e => {
+        actual = e.toString(16);
+        answer += actual.length === 1 ? "0" + actual : actual;
+    });
+    return answer;
+}
+
+/* console.log(convertToHexadecimal(255, 4, 14)); 
+console.log(convertToHexadecimal(0, 255, 255)); */
+
+
+//This function converts a binary input to decimal number
+function convertToBaseTen(x) {
+    return parseInt(x, 2)
+}
+
+console.log(convertToBaseTen("111"));
+console.log(convertToBaseTen("100"));
