@@ -114,8 +114,12 @@ function coerceToType(value, type) {
         case "string" :
             answer = stringifyValue(value);   
             break;    
-        case "object":
-            answer = Object(value);
+        case "object":            
+            try {
+                answer = JSON.parse(value);
+            } catch(e) {
+                throw new Error("The argument can not be converted to JSON object");
+            }            
             break;
         default:
             throw new Error("Unsupported type: " + type);
@@ -128,7 +132,8 @@ console.log(coerceToType(null, "string"));
 console.log(coerceToType("true", "boolean"));
 console.log(coerceToType("1.4557", "number")); 
 console.log(coerceToType("9007199254740993", "bigint")); 
-console.log(coerceToType(1164, "string"));  */
+console.log(coerceToType(1164, "string")); 
+console.log(coerceToType('{"result":true, "count":42}', "object")); */ 
 
 
 //This function convert a boolean input to YES or NO
@@ -164,5 +169,5 @@ function convertToBaseTen(x) {
     return parseInt(x, 2)
 }
 
-console.log(convertToBaseTen("111"));
-console.log(convertToBaseTen("100"));
+/* console.log(convertToBaseTen("111"));
+console.log(convertToBaseTen("100")); */
