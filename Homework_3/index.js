@@ -30,11 +30,15 @@ const getFullName = function(person) {
 console.log(getFullName({firstName: "Gabriel", lastName: "Campos"})); 
 */
 
-const separateWords = txt => txt.split(" ");
+const separateWords = txt => txt.toLowerCase().split(" ");
 const filterDuplicates = words => [...new Set(words)];
 const sortWords = words =>  [...words].sort();
-/* 
-console.log(sortWords(filterDuplicates(separateWords("Hello word Hello")))); 
+const filterUniqueWords = function (txt) {
+    return sortWords(filterDuplicates(separateWords(txt)));
+} 
+/*
+console.log(filterUniqueWords("Hello word Hello hello"));  
+console.log(filterUniqueWords("GABRIEL gabriel"));
 */
 
 const getAverageGrade = function(arr) {
