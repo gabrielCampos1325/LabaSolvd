@@ -114,10 +114,10 @@ const bankAccount = {
     set balance(newBalance) {
         this._balance = newBalance;
     },
-    transfer(target, amount) {
-        if (this._balance >= amount) {
-            this._balance -= amount;
-            target.balance += amount;
+    transfer(bankAcc1, bankAcc2, amount) {
+        if (bankAcc1.balance >= amount) {
+            bankAcc1.balance -= amount;
+            bankAcc2.balance += amount;
         } else {
             throw new Error("The specified amount can not be transfered. Insufficient funds");
         }
@@ -126,7 +126,7 @@ const bankAccount = {
 
 /* const primaryAccount = Object.create(bankAccount);
 const secondAccount = Object.create(bankAccount);
-primaryAccount.transfer(secondAccount, 300);
+bankAccount.transfer(primaryAccount, secondAccount, 300);
 console.log(primaryAccount.formattedBalance);
 console.log(secondAccount.formattedBalance); */
 
@@ -174,56 +174,66 @@ const proxyPerson = observeObject(person, callBackFunction);
 console.log(proxyPerson.age); */
 
 
-const deepCloneObject = function(target) {
-    let answer = {};
-    for (let key in target) {
-        if (typeof target[key] === "object") {
-            answer[key] = deepCloneObject(target[key]); 
-        } else {
-            const propDescriptor = Object.getOwnPropertyDescriptor(target, key);
-            Object.defineProperty(answer, key, {
-                value: target[key],
-                writable: propDescriptor.writable,
-                enumerable: propDescriptor.enumerable,
-                configurable: propDescriptor.configurable
-            });
-        }
+const deepCloneObject = function(target, clones = []) {
+    const index = clones.findIndex(e => e.original === target);
+    if (index !== -1) {
+        return clones[index].clone;
     }
-    return answer;
+    const clone = Array.isArray(target) ? [] : {};
+    clones.push({original: target, clone});
+    for (const key in target) {
+        clone[key] = deepCloneObject(target[key], clones);
+    }
+    return clone;
 }
 
 
-const validateObject = function(obj, schema) {
-    for (let key in schema) {
+const validateObject = function(obj, schema) {     
+    for (const key in schema) {
         if (!Object.hasOwnProperty(obj, key)) {
+            console.log(key + " property is not in the object")
             return false;         
         }
         if (schema[key].type !== typeof obj[key]) {
+            console.log(key + " type is different in schema")
             return false;  
         }
-        if (key === "window" &&
-            schema[key].minQuantity >= obj[key]) {
-            return false;  
+        const propDescriptor = Object.getOwnPropertyDescriptor(obj, key);
+        if (schema[key].writable !== propDescriptor.writable) {
+            console.log(key + " has incorrect writable value");
+            return false; 
         }
-        if (key === "door" &&
-            schema[key].color !== obj[key]) {
-            return false;  
-        }           
+        if (schema[key].enumerable !== propDescriptor.enumerable) {
+            console.log(key + " has incorrect enumerable value");
+            return false; 
+        }
+        if (schema[key].configurable !== propDescriptor.configurable) {
+            console.log(key + " has incorrect configurable value");
+            return false; 
+        }       
     }
     return true;
 }
 
+
 const houseSchema = {
-    window: {
+    window: { 
         type: "number",
-        minQuantity: 3
+        writable: true,
+        enumerable: true, 
+        configurable: true 
     },
     door: {
         type: "string",
-        color: "grey"
+        writable: true,
+        enumerable: true, 
+        configurable: true
     },
     firePlace: {
-        type: "boolean"        
+        type: "boolean",
+        writable: true,
+        enumerable: true, 
+        configurable: true         
     }
 }
 
