@@ -148,24 +148,46 @@ const createImmutableObject = function(target) {
     return answer;
 }
 
-const immutObj = createImmutableObject(person);
-console.log(Object.getOwnPropertyDescriptors(immutObj));
+/* const immutObj = createImmutableObject(person);
+console.log(Object.getOwnPropertyDescriptors(immutObj)); */
 
 
-const observeObject = function(obj, callBackFunction) {
-    /* let answer = deepCloneObject(obj);
-    answer["callBackFunction"] = callBackFunction;
-    return answer; */
-    const answer = {
-
+const observeObject = function(obj, callBackFunction) {    
+    const answer = {};
+    for (let key in obj) {
+        Object.defineProperty(answer, key, {
+            get: function() {
+                callBackFunction(key, "get");
+                return obj[key];
+            },
+            set: function(newValue) {
+                callBackFunction(key, "set");
+                obj[key] = newValue;
+            }
+        })
     }
+    return answer;    
 }
+
+/* const callBackFunction = (prop, action) => console.log(action + " " + prop);
+const proxyPerson = observeObject(person, callBackFunction);
+console.log(proxyPerson.age); */
 
 
 const deepCloneObject = function(target) {
     let answer = {};
     for (let key in target) {
-        answer[key] = target[key];
+        if (typeof target[key] === "object") {
+            answer[key] = deepCloneObject(target[key]); 
+        } else {
+            const propDescriptor = Object.getOwnPropertyDescriptor(target, key);
+            Object.defineProperty(answer, key, {
+                value: target[key],
+                writable: propDescriptor.writable,
+                enumerable: propDescriptor.enumerable,
+                configurable: propDescriptor.configurable
+            });
+        }
     }
     return answer;
 }
@@ -173,12 +195,42 @@ const deepCloneObject = function(target) {
 
 const validateObject = function(obj, schema) {
     for (let key in schema) {
-        if (!Object.hasOwnProperty.call(obj, key) &&
-            !(typeof key === typeof obj[key])) {
-                return false;
+        if (!Object.hasOwnProperty(obj, key)) {
+            return false;         
         }
+        if (schema[key].type !== typeof obj[key]) {
+            return false;  
+        }
+        if (key === "window" &&
+            schema[key].minQuantity >= obj[key]) {
+            return false;  
+        }
+        if (key === "door" &&
+            schema[key].color !== obj[key]) {
+            return false;  
+        }           
     }
     return true;
 }
 
-        
+const houseSchema = {
+    window: {
+        type: "number",
+        minQuantity: 3
+    },
+    door: {
+        type: "string",
+        color: "grey"
+    },
+    firePlace: {
+        type: "boolean"        
+    }
+}
+
+const house = {
+    window: 5,
+    door: "blue",
+    firePlace: true
+}
+
+/* console.log(validateObject(house, houseSchema)); */
