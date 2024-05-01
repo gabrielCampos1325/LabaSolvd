@@ -1,14 +1,14 @@
 function customFilterUnique(arr, callbackFunction) {
-    let answer = [];
     let uniqueElements = new Set();
     arr.forEach(element => {
         const x = callbackFunction(element);
         if (!uniqueElements.has(x)) {
-            uniqueElements.add(x);
-            answer.push(element);
+            uniqueElements.add(x);            
+        } else {
+            uniqueElements.delete(x);
         }
     });
-    return answer;
+    return [...uniqueElements];
 }
 
 /* const books = [
@@ -18,8 +18,14 @@ function customFilterUnique(arr, callbackFunction) {
     { name: "The wolf", year: 1960 },
     { name: "Harry Potter", year: 1960 }    
 ];
-
-console.log(customFilterUnique(books, e => e.year)); */
+console.log(customFilterUnique(books, e => e.year));
+const teachers = [
+    {name: 'Tomas'},
+    {name: 'Tomas'},
+    {name: 'Ilya'},
+    {name: 'Alexandrina'}
+];
+console.log(customFilterUnique(teachers, e => e.name)); */
 
 
 function chunkArray(arr, chunkSize) {
