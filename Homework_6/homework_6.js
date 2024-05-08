@@ -69,7 +69,7 @@ console.log(code);
 
 
 //Task 4: Implementing Debounce Function
-function debounce(func, delay) {
+/* function debounce(func, delay) {
     let timeOut;
     return function(...args) {
         clearTimeout(timeOut);
@@ -82,12 +82,12 @@ function debouncedSearch(query) {
 	console.log("Searching for:", query);
 }
 
-const debouncedSearchHandler = debounce(debouncedSearch, 300);
+const debouncedSearchHandler = debounce(debouncedSearch, 3000);
 
 const inputElement = document.getElementById("search-input");
 inputElement.addEventListener("input", event => {
 	debouncedSearchHandler(event.target.value);
-});
+}); */
 
 //Task 5: Implementing Throttle Function
 function throttle(func, interval) {
@@ -107,7 +107,10 @@ function onScroll(event) {
 
 const throttledScrollHandler = throttle(onScroll, 1000);
 
-window.addEventListener("scroll", throttledScrollHandler);
+setInterval(() => {
+    throttledScrollHandler({ type: 'scroll' });
+}, 1000);
+//window.addEventListener("scroll", throttledScrollHandler);
 
 //Task 6: Currying Function Implementation
 function curry(funct, arity) {
