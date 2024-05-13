@@ -35,8 +35,8 @@ function promiseAllSettled(arrOfPromises) {
         arrOfPromises.forEach((element, i) => {
             element.then(value => {
                 answer[i] = { status: 'fulfilled', value};
-            }).catch(e => {
-                answer[i] = { status: 'rejected', e };
+            }).catch(reason => {
+                answer[i] = { status: 'rejected', reason };
             }).finally(() => {
                 if (answer.length === arrOfPromises.length) {
                     resolve(answer);
