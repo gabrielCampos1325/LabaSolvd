@@ -30,7 +30,7 @@ class FictionBook extends Book {
     }
 }
 
-/* This class models a FictionBook object;
+/* This class models a NonFictionBook object;
 This class inherits from Book and have 6 attributes:
     The first 5 are the same for Book class and the last 
     one is specific for the NonFictionBook class:
@@ -79,10 +79,10 @@ class User {
 This class have 1 attribute:
     - books: an array that contains books
 This class have 4 methods:
-    -addBook: if the availability of the book is true it adds the book to the attribute cart
-    -removeBook: if the the book is in the cart it gets deleted
-    -getTotalPrice: it accumulates the total price of the books in the array
-    -getBooks: getter for the books array
+    - addBook: if the availability of the book is true it adds the book to the attribute cart
+    - removeBook: if the the book is in the cart it gets deleted
+    - getTotalPrice: it accumulates the total price of the books in the array
+    - getBooks: getter for the books array
 */
 class Cart {
     constructor() {
