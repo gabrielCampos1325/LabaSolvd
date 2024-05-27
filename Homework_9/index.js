@@ -679,6 +679,41 @@ function dijkstra(graph, start, end) {
     return null;
 }
 
+// Create vertices
+let vertexA = new Vertice('A');
+let vertexB = new Vertice('B');
+let vertexC = new Vertice('C');
+let vertexD = new Vertice('D');
+let vertexE = new Vertice('E');
+
+// Create graph and add vertices
+let graph = new Graph();
+graph.addVertice(vertexA);
+graph.addVertice(vertexB);
+graph.addVertice(vertexC);
+graph.addVertice(vertexD);
+graph.addVertice(vertexE);
+
+// Connect vertices with weights
+graph.connect(vertexA, vertexB, 1); // A -> B (weight 1)
+graph.connect(vertexA, vertexC, 4); // A -> C (weight 4)
+graph.connect(vertexB, vertexC, 2); // B -> C (weight 2)
+graph.connect(vertexB, vertexD, 5); // B -> D (weight 5)
+graph.connect(vertexC, vertexD, 1); // C -> D (weight 1)
+graph.connect(vertexD, vertexE, 3); // D -> E (weight 3)
+
+// Test Dijkstra's Algorithm
+let start = vertexA;
+let end = vertexE;
+let path = dijkstra(graph, start, end);
+
+if (path) {
+    console.log("Shortest path from", start.data(), "to", end.data(), "is:");
+    path.forEach(vertex => console.log(vertex.data()));
+} else {
+    console.log("No path found from", start.data(), "to", end.data());
+}
+
 //Breadth-First Search (BFS) for finding the shortest path in an graph
 function bfs(graph, start, end) {
     const distances = new Map();
@@ -726,6 +761,40 @@ function bfs(graph, start, end) {
     return null;
 }
 
+// Create vertices
+vertexA = new Vertice('A');
+vertexB = new Vertice('B');
+vertexC = new Vertice('C');
+vertexD = new Vertice('D');
+vertexE = new Vertice('E');
+
+// Create graph and add vertices
+graph = new Graph();
+graph.addVertice(vertexA);
+graph.addVertice(vertexB);
+graph.addVertice(vertexC);
+graph.addVertice(vertexD);
+graph.addVertice(vertexE);
+
+// Connect vertices
+graph.connect(vertexA, vertexB); // A -> B
+graph.connect(vertexA, vertexC); // A -> C
+graph.connect(vertexB, vertexD); // B -> D
+graph.connect(vertexC, vertexD); // C -> D
+graph.connect(vertexD, vertexE); // D -> E
+
+// Test BFS Shortest Path
+start = vertexA;
+end = vertexE;
+path = bfs(graph, start, end);
+
+if (path) {
+    console.log("Shortest path from", start.data(), "to", end.data(), "is:");
+    path.forEach(vertex => console.log(vertex.data()));
+} else {
+    console.log("No path found from", start.data(), "to", end.data());
+}
+
 // Detects if a linked list has a cycle using Floyd's Cycle Detection Algorithm.
 function hasCycle(linkedList) {
     if (linkedList.isEmpty()) return false;
@@ -744,6 +813,34 @@ function hasCycle(linkedList) {
 
     return false; // No cycle detected
 }
+
+// Creating a linked list
+let list = new LinkedList();
+let node1 = new Node();
+node1.setData(1);
+let node2 = new Node();
+node2.setData(2);
+let node3 = new Node();
+node3.setData(3);
+let node4 = new Node();
+node4.setData(4);
+
+list.addtoEnd(node1);
+list.addtoEnd(node2);
+list.addtoEnd(node3);
+list.addtoEnd(node4);
+
+// Creating a cycle for testing
+node4.setNext(node2); // Cycle: node4 -> node2
+
+// Checking if the linked list has a cycle
+console.log(hasCycle(list));
+
+// Removing the cycle for testing
+node4.setNext(null);
+
+// Checking again if the linked list has a cycle
+console.log(hasCycle(list));
 
 
 // Part 3: Demonstration
