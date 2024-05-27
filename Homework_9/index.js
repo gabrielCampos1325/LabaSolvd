@@ -447,7 +447,7 @@ class LinkedList {
 			return false;
 		this.size++;
 		let aux = new Node();
-		aux.setDato(elem);
+		aux.setData(elem);
 		if (pos == 1) {
 			aux.setNext(this.start);
 			this.start = aux;
@@ -610,6 +610,139 @@ function isBST(node, min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGE
         aux = isBST(node.getRightChild(), node.getData() + 1, max);
     }
     return aux;
+}
+
+//Dijkstra's algorithm to find the shortest path between two vertices
+class PriorityQueue {
+    constructor() {
+        this.data = [];
+    }
+
+    enqueue(priority, value) {
+        this.data.push({ priority, value });
+        this.data.sort((a, b) => a.priority - b.priority);
+    }
+
+    dequeue() {
+        return this.data.shift().value;
+    }
+
+    isEmpty() {
+        return this.data.length === 0;
+    }
+}
+
+function dijkstra(graph, start, end) {
+    const distances = new Map();
+    const previousVertices = new Map();
+    const priorityQueue = new PriorityQueue();
+
+    distances.set(start, 0);
+    graph.vertices.start();
+    while (!graph.vertices.end()) {
+        const vertex = graph.vertices.next();
+        if (vertex !== start) {
+            distances.set(vertex, Infinity);
+        }
+        previousVertices.set(vertex, null);
+    }
+
+    priorityQueue.enqueue(0, start);
+
+    while (!priorityQueue.isEmpty()) {
+        const currentVertex = priorityQueue.dequeue();
+
+        if (currentVertex === end) {
+            const path = [];
+            let step = end;
+            while (step) {
+                path.push(step);
+                step = previousVertices.get(step);
+            }
+            return path.reverse();
+        }
+
+        const adjacents = graph.adjacentsList(currentVertex);
+        adjacents.start();
+        while (!adjacents.end()) {
+            const edge = adjacents.next();
+            const neighbor = edge.destinyVertice();
+            const newDist = distances.get(currentVertex) + edge.weight();
+            if (newDist < distances.get(neighbor)) {
+                distances.set(neighbor, newDist);
+                previousVertices.set(neighbor, currentVertex);
+                priorityQueue.enqueue(newDist, neighbor);
+            }
+        }
+    }
+
+    return null;
+}
+
+//Breadth-First Search (BFS) for finding the shortest path in an graph
+function bfs(graph, start, end) {
+    const distances = new Map();
+    const previousVertices = new Map();
+    const queue = new Queue();
+
+    distances.set(start, 0);
+    graph.vertices.start();
+    while (!graph.vertices.end()) {
+        const vertex = graph.vertices.next();
+        if (vertex !== start) {
+            distances.set(vertex, Infinity);
+        }
+        previousVertices.set(vertex, null);
+    }
+
+    queue.enqueue(start);
+
+    while (!queue.isEmpty()) {
+        const currentVertex = queue.dequeue();
+
+        if (currentVertex === end) {
+            const path = [];
+            let step = end;
+            while (step) {
+                path.push(step);
+                step = previousVertices.get(step);
+            }
+            return path.reverse();
+        }
+
+        const adjacents = graph.adjacentsList(currentVertex);
+        adjacents.start();
+        while (!adjacents.end()) {
+            const edge = adjacents.next();
+            const neighbor = edge.destinyVertice();
+            if (distances.get(neighbor) === Infinity) {
+                distances.set(neighbor, distances.get(currentVertex) + 1);
+                previousVertices.set(neighbor, currentVertex);
+                queue.enqueue(neighbor);
+            }
+        }
+    }
+
+    return null;
+}
+
+// Detects if a linked list has a cycle using Floyd's Cycle Detection Algorithm.
+function hasCycle(linkedList) {
+    if (linkedList.isEmpty()) return false;
+
+    let slowPointer = linkedList.startNode;
+    let fastPointer = linkedList.startNode;
+
+    while (fastPointer !== null && fastPointer.getNext() !== null) {
+        slowPointer = slowPointer.getNext();
+        fastPointer = fastPointer.getNext().getNext();
+
+        if (slowPointer === fastPointer) {
+            return true; // Cycle detected
+        }
+    }
+
+    return false; // No cycle detected
 }
 
 
