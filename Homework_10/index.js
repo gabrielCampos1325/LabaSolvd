@@ -1,3 +1,5 @@
+const { data } = require('./dataBase.js');
+
 //HashTable class for storing key-value pairs with my custom hashing function and linear probing collision resolution.
 class HashTable {
     constructor() {
@@ -11,6 +13,10 @@ class HashTable {
         this.table = new Array(this.physicalDimension);      
     }
     
+    asd(){
+        return this.physicalDimension;
+    }
+
     hash(key) {
         let result = 0;
         // Sum the Unicode values of each character in the key
@@ -23,7 +29,7 @@ class HashTable {
 
     //Resize the hash table by doubling its size and rehashing all key-value pairs
     resize() {
-        const newSize = this.fisicalDimension * 2; // Double the size of the array
+        const newSize = this.physicalDimension * 2; // Double the size of the array
         const newTable = new Array(newSize);
     
         // Rehash all key-value pairs into the new array
@@ -40,13 +46,13 @@ class HashTable {
             }
         }    
         this.table = newTable;
-        this.fisicalDimension = newSize;
+        this.physicalDimension = newSize;
     }
     
 
     insert(key, value) {
         // Check if the hash table needs to be resized
-        if (this.logicalDimension / this.fisicalDimension > this.packingDensity) {
+        if (this.logicalDimension / this.physicalDimension > this.packingDensity) {
             this.resize();
         }
         let index = this.hash(key);
@@ -99,6 +105,13 @@ console.log(hashTable.get("sehou")); // Output: 456
 console.log(hashTable.delete("sehou"));
 console.log(hashTable.get("sehou")); // Output: undefined
 
+// Adding more than 150 new [key, value] pairs to resize the HashTable. In this case it will resize two times
+for (const [key, value] of data) {
+    hashTable.insert(key, value);
+}
+
+console.log(hashTable.get("nameZane3")); // Output: Zane
+console.log(hashTable.get("house")); // Output: 123
 /* 
 Performance Analysis:
 
